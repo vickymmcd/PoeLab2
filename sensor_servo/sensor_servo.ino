@@ -4,28 +4,28 @@ I intentionally use the const byte construct here
 instead of #define. It's less dangerous (no name collision possible)
 and safer since variables have scope.
 */
-const byte PUSH_BUTTON = 8;
+#include <Servo.h>
+
+Servo myservo;
 const byte sensor_pin = A0;
 const byte CMD_READ_SENSOR = 1;
-const byte CMD_READ_BTN = 2;
+const byte CMD_MOVE_SERVO = 2;
 
 long prev_t = 0;
 int sensor_value = 0;
+int pos = 0;
 byte cmd_id = 0; 
-
-byte btn_state = LOW;
 
 String result="";
 String distance="";
 
 void setup() {
-  //Setup input and outputs: LEDs out, pushbutton in.
-  pinMode(PUSH_BUTTON, INPUT);
+  //Setup input and outputs
+  myservo.attach(9);  // attaches the servo on pin 9 to the servo object
   Serial.begin(9600);
 }
 
 void loop() {
-  byte btn_state = digitalRead(PUSH_BUTTON);
   sensor_value = analogRead(sensor_pin);
   distance = int(5748.858*pow(sensor_value, -.868));
 
@@ -44,9 +44,18 @@ void loop() {
       result = "";
       distance = "";
       break;
-    case CMD_READ_BTN:
-      result = result + "Button state: " + btn_state;
+    case CMD_MOVE_SERVO:
+      result = result + "Moving the servo now";
       Serial.println(result);
+      for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
+        // in steps of 1 degree
+        myservo.write(pos);              // tell servo to go to position in variable 'pos'
+        delay(15);                       // waits 15ms for the servo to reach the position
+      }
+      for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+        myservo.write(pos);              // tell servo to go to position in variable 'pos'
+        delay(15);                       // waits 15ms for the servo to reach the position
+      }
       result = "";
       break;
     break;
