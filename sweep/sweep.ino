@@ -31,7 +31,7 @@ void setup() {
 
 void loop() {
 
-  if(Serial.available() > 0) {
+  if(Serial.available() >= 0) {
     cmd_id = Serial.read();
   }
   else{
@@ -39,13 +39,17 @@ void loop() {
   }
   
   switch(cmd_id){
+    case 0:
+        myservo.write(50);
+        myservo2.write(110);
+      break;
     case CMD_START:
     // start sweeping the servos over the letter
       for (pos = 0; pos <= 50; pos += 5) { // goes from 0 degrees to 50 degrees
         // in steps of 5 degrees
           myservo.write(pos); // tell servo to go to position in variable 'pos'
           delay(15);
-        for (pos2=70; pos2<=170; pos2+=1){
+        for (pos2=10; pos2<=110; pos2+=1){
             myservo2.write(pos2);
             delay(15);
             sensor_value = analogRead(sensor_pin);

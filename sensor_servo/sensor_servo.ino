@@ -74,7 +74,7 @@ void loop() {
         // in steps of 1 degree
           myservo.write(pos); // tell servo to go to position in variable 'pos'
           delay(15);
-        for (pos2=70; pos2<=170; pos2+=1){
+        for (pos2=10; pos2<=110; pos2+=1){
             myservo2.write(pos2);
             delay(15);
         }

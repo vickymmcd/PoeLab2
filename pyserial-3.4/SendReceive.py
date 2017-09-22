@@ -2,7 +2,7 @@
 
 from serial import Serial, SerialException
 
-cxn = Serial('/dev/ttyACM1', baudrate=9600)
+cxn = Serial('/dev/ttyACM0', baudrate=9600)
 
 while(True):
     try:
