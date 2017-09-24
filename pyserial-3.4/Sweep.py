@@ -3,13 +3,18 @@
 from serial import Serial, SerialException
 
 import json
+import math
+import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
 
 cxn = Serial('/dev/ttyACM0', baudrate=9600)
 running = False
 results_list = []
 xs = []
 ys = []
+zs = []
 
 while(True):
     try:
@@ -28,17 +33,47 @@ while(True):
                 running = False
                 cxn.write([0])
                 cmd_id = 0
-                with open('sweep_file') as f:
+                with open('sweep_file.csv', 'w') as f:
                     json.dump(results_list, f)
                 for i, my_result in enumerate(results_list):
-                    ys.append(my_result[2])
-                    xs.append(my_result[0])
-                plt.plot(xs, ys)
+                    '''3d stuff'''
+                    '''if my_result[0] == 25:
+                        xval = 0
+                    elif my_result[0] > 25:
+                        xval = math.sin(math.radians(my_result[0]) -25)*my_result[2]
+                    else:
+                        xval = -math.sin(math.radians(my_result[0]))*my_result[2]
+                    if my_result[1] == 60:
+                        yval = 0
+                    elif my_result[1] > 60:
+                        yval = math.sin(math.radians(my_result[1]) -60)*my_result[2]
+                    else:
+                        yval = -math.sin(math.radians(my_result[1]) -10)*my_result[2]'''
+                    #xval = my_result[2]*math.cos(math.radians(my_result[0]))*math.sin(math.radians(my_result[1]))
+                    #yval = my_result[2]*math.sin(math.radians(my_result[0]))*math.sin(math.radians(my_result[1]))
+                    #zval = my_result[2]*math.cos(math.radians(my_result[1]))
 
-                plt.xlabel('Servo 1 Angle (degrees)')
-                plt.ylabel('Distance (cm)')
+                    '''2d version'''
+                    '''xval = my_result[0]
+                    yval = my_result[2]'''
+                    ys.append(0)
+                    xs.append(my_result[0])
+                    zs.append(my_result[2])
+                    #xs.append(xval)
+                    #ys.append(yval)
+                    #zs.append(zval)
+
+                fig = plt.figure()
+                #ax = fig.add_subplot(111, projection='3d')
+
+                #ax.scatter(xs, ys, zs, c='r', marker='o')
+                plt.scatter(xs, ys, c=zs, vmin=0, vmax=60, s=200)
+                plt.colorbar()
+
+                #ax.set_xlabel('Servo 1 Angle (degrees)')
+                #ax.set_ylabel('Distance (cm)')
+
                 plt.title('Distance Graph')
-                plt.grid(True)
                 plt.savefig("graph.png")
                 plt.show()
             result = str(result)
@@ -49,7 +84,7 @@ while(True):
             servo2angle = result[:result.index(',')]
             result = result[result.index(',')+1:]
             distance = result
-            results_list.append((servo1angle, servo2angle, distance))
+            results_list.append((int(servo1angle), int(servo2angle), int(distance)))
             print (str(result))
     except ValueError:
         print ("You must enter an integer value between 1 and 3.")
