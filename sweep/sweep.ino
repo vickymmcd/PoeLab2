@@ -26,6 +26,7 @@ void setup() {
   //Setup input and outputs
   myservo.attach(10);  // attaches the servo on pin 9 to the servo object
   myservo2.attach(9);
+  myservo.write(90);
   Serial.begin(9600);
 }
 
@@ -45,11 +46,11 @@ void loop() {
       break;
     case CMD_START:
     // start sweeping the servos over the letter
-      for (pos = 0; pos <= 50; pos += 5) { // goes from 0 degrees to 50 degrees
+      for (pos = 70; pos <= 110; pos += 1) { // goes from 0 degrees to 50 degrees
         // in steps of 5 degrees
           myservo.write(pos); // tell servo to go to position in variable 'pos'
           delay(15);
-        for (pos2=10; pos2<=110; pos2+=1){
+        for (pos2=50; pos2<=90; pos2+=1){
             myservo2.write(pos2);
             delay(15);
             sensor_value = analogRead(sensor_pin);

@@ -45,7 +45,7 @@ void loop() {
       break;
     case CMD_START:
     // start sweeping the servos over the letter
-      for (pos = 0; pos <= 50; pos += 1) { // goes from 0 degrees to 50 degrees
+      for (pos = 70; pos <= 110; pos += 1) { // goes from 0 degrees to 50 degrees
         // in steps of 5 degrees
           myservo.write(pos); // tell servo to go to position in variable 'pos'
           delay(15);

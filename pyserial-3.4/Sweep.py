@@ -29,49 +29,37 @@ while(True):
             while cxn.inWaiting() < 1:
                 pass
             result = cxn.readline();
-            if '50,110,' in str(result):
+            if '110,110,' in str(result):
                 running = False
                 cxn.write([0])
                 cmd_id = 0
                 with open('sweep_file.csv', 'w') as f:
                     json.dump(results_list, f)
                 for i, my_result in enumerate(results_list):
-                    '''3d stuff'''
-                    '''if my_result[0] == 25:
-                        xval = 0
-                    elif my_result[0] > 25:
-                        xval = math.sin(math.radians(my_result[0]) -25)*my_result[2]
-                    else:
-                        xval = -math.sin(math.radians(my_result[0]))*my_result[2]
-                    if my_result[1] == 60:
-                        yval = 0
-                    elif my_result[1] > 60:
-                        yval = math.sin(math.radians(my_result[1]) -60)*my_result[2]
-                    else:
-                        yval = -math.sin(math.radians(my_result[1]) -10)*my_result[2]'''
-                    #xval = my_result[2]*math.cos(math.radians(my_result[0]))*math.sin(math.radians(my_result[1]))
-                    #yval = my_result[2]*math.sin(math.radians(my_result[0]))*math.sin(math.radians(my_result[1]))
-                    #zval = my_result[2]*math.cos(math.radians(my_result[1]))
+                    if my_result[2] <= 50:
+                        '''3d stuff'''
+                        '''xval = my_result[2]*math.cos(math.radians(my_result[0]))*math.sin(math.radians(my_result[1]))
+                        yval = my_result[2]*math.sin(math.radians(my_result[0]))*math.sin(math.radians(my_result[1]))
+                        zval = my_result[2]*math.cos(math.radians(my_result[1]))'''
 
-                    '''2d version'''
-                    '''xval = my_result[0]
-                    yval = my_result[2]'''
-                    ys.append(0)
-                    xs.append(my_result[0])
-                    zs.append(my_result[2])
-                    #xs.append(xval)
-                    #ys.append(yval)
-                    #zs.append(zval)
+                        '''2d version'''
+                        xval = my_result[0]
+                        yval = my_result[2]
+
+                        xs.append(xval)
+                        ys.append(yval)
+                        #zs.append(zval)
 
                 fig = plt.figure()
-                #ax = fig.add_subplot(111, projection='3d')
+                '''ax = fig.add_subplot(111, projection='3d')
 
-                #ax.scatter(xs, ys, zs, c='r', marker='o')
-                plt.scatter(xs, ys, c=zs, vmin=0, vmax=60, s=200)
-                plt.colorbar()
+                #plt.scatter(xs, ys, c=zs, vmin=0, vmax=60, s=200)
+                ax.scatter(xs, ys, zs)'''
+                #plt.colorbar()
 
-                #ax.set_xlabel('Servo 1 Angle (degrees)')
-                #ax.set_ylabel('Distance (cm)')
+                plt.scatter(xs, ys)
+                plt.xlabel('Servo 1 Angle (degrees)')
+                plt.ylabel('Distance (cm)')
 
                 plt.title('Distance Graph')
                 plt.savefig("graph.png")
